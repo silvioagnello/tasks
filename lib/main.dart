@@ -35,12 +35,12 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
           title: Center(
-            child: Text("LISTAS",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: "LibreBaskerville")),
-          )),
+        child: Text("LISTAS",
+            style: TextStyle(
+                fontSize: 30.0,
+                // fontWeight: FontWeight.bold,
+                fontFamily: "LibreBaskerville")),
+      )),
       body: ListView.builder(
         itemCount: _categories.length,
         itemBuilder: _categoryCards,
@@ -55,12 +55,18 @@ class _HomeState extends State<Home> {
         child: Card(
           elevation: 8.0,
           child: Container(
-            color: _categories[idx].color,
+            // color: _categories[idx].color,
             height: 100.0,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(top: 20),
               child: ListTile(
-                leading: Icon(_categories[idx].icon, size: 60.0),
+                leading: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(shape: BoxShape.circle,
+                  color: _categories[idx].color),
+                  child: Icon(_categories[idx].icon, size: 40.0),
+                ),
                 title: Text(_categories[idx].name,
                     style: TextStyle(fontSize: 28, color: Colors.black87)),
               ),
