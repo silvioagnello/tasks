@@ -5,6 +5,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+class Categ {
+  String categ;
+  String name;
+  bool ok;
+
+// Categ();
+  Categ(this.categ, this.name, this.ok);
+}
+
 class TasksPage extends StatefulWidget {
   final String categ;
 
@@ -18,6 +27,7 @@ class _TasksPageState extends State<TasksPage> {
   final _toDoController = TextEditingController();
 
   List _toDoList = [];
+  List _toDoList2 = [];
 // List<Map<String, dynamic>> _toDoList = [
   // {"name": "teste1", "ok": true},
   // {"name": "teste2", "ok": false}
@@ -32,17 +42,23 @@ class _TasksPageState extends State<TasksPage> {
     _readData().then((data) {
       setState(() {
         _toDoList = json.decode(data);
+        _toDoList2 = json.decode(data);
+        _toDoList2.removeWhere((c) => c["categ"] == widget.categ);
+        _toDoList.removeWhere((c) => c["categ"] != widget.categ);
       });
     });
   }
 
   void _addToDo() {
     setState(() {
-      Map<String, dynamic> newToDo = Map();
-      newToDo["name"] = _toDoController.text;
+      Map<String, dynamic> newTask = {
+        "categ": "${widget.categ}",
+        "name": _toDoController.text,
+        "ok": false
+      };
       _toDoController.text = "";
-      newToDo["ok"] = false;
-      _toDoList.add(newToDo);
+      
+      _toDoList.add(newTask);
       _saveData();
     });
   }
@@ -58,7 +74,8 @@ class _TasksPageState extends State<TasksPage> {
         else
           return 0;
       });
-      _saveData();
+
+      // _saveData();
     });
     return null;
   }
@@ -111,7 +128,7 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  Widget buildItem(context, index) {
+  Widget buildItem(context, int index) {
     return Dismissible(
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       background: Container(
@@ -124,7 +141,7 @@ class _TasksPageState extends State<TasksPage> {
               ))),
       direction: DismissDirection.startToEnd,
       child: CheckboxListTile(
-          title: Text(_toDoList[index]["name"]),
+          title: Text(_toDoList[index]['name']),
           value: _toDoList[index]["ok"],
           secondary: CircleAvatar(
               child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error)),
@@ -167,7 +184,9 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   Future<File> _saveData() async {
-    String data = json.encode(_toDoList);
+    var newMyList = _toDoList + _toDoList2;
+    _toDoList2 = [];
+    String data = json.encode(newMyList);   //  json.encode(_toDoList2);
     final file = await _getFile();
     return file.writeAsString(data);
   }
