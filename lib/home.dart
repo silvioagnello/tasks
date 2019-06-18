@@ -38,13 +38,13 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _toDoList3 = json.decode(data);
 
-        qtPend0 = _toDoList3.where((c) => c["categ"] == "MERCADO").length;
-        qtPend1 = _toDoList3.where((c) => c["categ"] == "FARMÁCIA").length;
-        qtPend2 = _toDoList3.where((c) => c["categ"] == "CONSTRUÇÃO").length;
-        qtPend3 = _toDoList3.where((c) => c["categ"] == "TAREFAS").length;
-        qtPend4 = _toDoList3.where((c) => c["categ"] == "AUTOMÓVEL").length;
-        qtPend5 = _toDoList3.where((c) => c["categ"] == "ROUPAS").length;
-        qtPend6 = _toDoList3.where((c) => c["categ"] == "OUTROS").length;
+        qtPend0 = _toDoList3.where((c) => c["idCateg"] == "0").length;
+        qtPend1 = _toDoList3.where((c) => c["idCateg"] == "1").length;
+        qtPend2 = _toDoList3.where((c) => c["idCateg"] == "2").length;
+        qtPend3 = _toDoList3.where((c) => c["idCateg"] == "3").length;
+        qtPend4 = _toDoList3.where((c) => c["idCateg"] == "4").length;
+        qtPend5 = _toDoList3.where((c) => c["idCateg"] == "5").length;
+        qtPend6 = _toDoList3.where((c) => c["idCateg"] == "6").length;
       });
     });
   }
@@ -76,26 +76,26 @@ class _HomePageState extends State<HomePage> {
 
   Widget _categoryCards(context, idx) {
     String qtPendCateg;
-    switch (_categories[idx].nmCateg) {
-      case "MERCADO":
+    switch (_categories[idx].idCateg) {
+      case "0":
         qtPendCateg = qtPend0.toString();
         break;
-      case "FARMÁCIA":
+      case "1":
         qtPendCateg = qtPend1.toString();
         break;
-      case "CONSTRUÇÃO":
+      case "2":
         qtPendCateg = qtPend2.toString();
         break;
-      case "TAREFAS":
+      case "3":
         qtPendCateg = qtPend3.toString();
         break;
-      case "AUTOMÓVEL":
+      case "4":
         qtPendCateg = qtPend4.toString();
         break;
-      case "ROUPAS":
+      case "5":
         qtPendCateg = qtPend5.toString();
         break;
-      case "OUTROS":
+      case "6":
         qtPendCateg = qtPend6.toString();
         break;
       default:
@@ -104,11 +104,22 @@ class _HomePageState extends State<HomePage> {
 
     return GestureDetector(
       onTap: () {
+        // String qtCateg;
+        // Route route = MaterialPageRoute(
+        //     builder: (context) =>
+        //         TasksPage(idCateg: _categories[idx].idCateg.toString()));
+        // Navigator.push(context, route);
+        
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    TasksPage(idCateg: _categories[idx].idCateg.toString())));
+          context,
+          MaterialPageRoute(
+            builder: (context) => TasksPage(
+                  idCateg: _categories[idx].idCateg.toString(),
+                  // qtCateg: qtPendCateg
+                ),
+          ),
+        );
+        print(_categories[idx].idCateg.toString());
       },
       child: Padding(
         padding:

@@ -16,6 +16,7 @@ class Categ {
 
 class TasksPage extends StatefulWidget {
   final String idCateg;
+  // String qtCateg;
 
   TasksPage({this.idCateg});
 
@@ -40,40 +41,42 @@ class _TasksPageState extends State<TasksPage> {
         _toDoList = json.decode(data);
         _toDoList2 = json.decode(data);
         _toDoList2.removeWhere((c) => c["idCateg"] == widget.idCateg);
+
         _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
+        
       });
     });
   }
 
-String nmCateg(idCateg){
-  String nmCateg;
-   switch (idCateg) {
+  String nmCateg(idCateg) {
+    String nmCateg;
+    switch (idCateg) {
       case "0":
-      nmCateg = 'MERCADO';
+        nmCateg = 'MERCADO';
         break;
       case "1":
-      nmCateg = 'FARMÁCIA';
+        nmCateg = 'FARMÁCIA';
         break;
       case "2":
-      nmCateg = 'CONSTRUÇÃO';
+        nmCateg = 'CONSTRUÇÃO';
         break;
       case "3":
-      nmCateg = 'TAREFAS';
+        nmCateg = 'TAREFAS';
         break;
       case "4":
-      nmCateg = 'AUTOMÓVEL';
+        nmCateg = 'AUTOMÓVEL';
         break;
       case "5":
-      nmCateg = 'ROUPAS';
+        nmCateg = 'ROUPAS';
         break;
       case "6":
-      nmCateg = 'OUTROS';
+        nmCateg = 'OUTROS';
         break;
       default:
-      nmCateg = 'EXTRA';
+        nmCateg = 'EXTRA';
     }
     return nmCateg;
-}
+  }
 
   void _addToDo() {
     setState(() {
@@ -86,6 +89,9 @@ String nmCateg(idCateg){
       _toDoController.text = "";
 
       _toDoList.add(newTask);
+      
+      // widget.qtCateg = _toDoList.length.toString();
+      
       _saveData();
     });
   }
@@ -143,7 +149,9 @@ String nmCateg(idCateg){
                     //   child: Icon(Icons.check),
                     //   onPressed: _addToDo,
                     // ),
-                    child: RaisedButton(shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
                       elevation: 4.0,
                       color: Colors.lightBlueAccent,
                       child: Icon(Icons.check),
