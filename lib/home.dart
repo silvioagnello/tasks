@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _toDoList3 = json.decode(data);
 
+        _toDoList3.removeWhere((d) => d["ok"] == true);
         qtPend0 = _toDoList3.where((c) => c["idCateg"] == "0").length;
         qtPend1 = _toDoList3.where((c) => c["idCateg"] == "1").length;
         qtPend2 = _toDoList3.where((c) => c["idCateg"] == "2").length;
