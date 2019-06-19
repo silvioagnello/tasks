@@ -35,9 +35,9 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void initState() {
     super.initState();
-    
-        // Future.delayed(const Duration(seconds: 5), () => "1");
-        sleep(const Duration(milliseconds: 10)); 
+
+    // Future.delayed(const Duration(seconds: 5), () => "1");
+    sleep(const Duration(milliseconds: 10));
 
     _readData().then((data) {
       setState(() {
@@ -46,7 +46,7 @@ class _TasksPageState extends State<TasksPage> {
 
         _toDoList2.removeWhere((c) => c["idCateg"] == widget.idCateg);
         _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
-        
+
         buttonChanged = false;
       });
     });
@@ -95,7 +95,6 @@ class _TasksPageState extends State<TasksPage> {
         _toDoController.text = "";
         _toDoList.add(newTask);
         _saveData();
-
       }
     });
   }
@@ -172,6 +171,7 @@ class _TasksPageState extends State<TasksPage> {
                         child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
+                          textCapitalization: TextCapitalization.sentences,
                           controller: _toDoController,
                           autofocus: true,
                           style: TextStyle(fontSize: 20),
@@ -229,6 +229,7 @@ class _TasksPageState extends State<TasksPage> {
           onChanged: (c) {
             setState(() {
               _toDoList[index]["ok"] = c;
+              buttonChanged = true;
               _saveData();
             });
           }),
@@ -237,6 +238,7 @@ class _TasksPageState extends State<TasksPage> {
           _lastRemoved = Map.from(_toDoList[index]);
           _lastRemovedPos = index;
           _toDoList.removeAt(index);
+          buttonChanged = true;
           _saveData();
 
           final snack = SnackBar(
@@ -246,6 +248,7 @@ class _TasksPageState extends State<TasksPage> {
               onPressed: () {
                 setState(() {
                   _toDoList.insert(_lastRemovedPos, _lastRemoved);
+                  buttonChanged = true;
                   _saveData();
                 });
               },
