@@ -34,35 +34,23 @@ class _TasksPageState extends State<TasksPage> {
 
   @override
   void initState() {
-    // print(widget.buttonChanged);
     super.initState();
+    
+        // Future.delayed(const Duration(seconds: 5), () => "1");
+        sleep(const Duration(milliseconds: 10)); 
+
     _readData().then((data) {
       setState(() {
         _toDoList = json.decode(data);
         _toDoList2 = json.decode(data);
-// print(widget.idCateg);
-// print(_toDoList2.length);
-// print(_toDoList.length);
+
         _toDoList2.removeWhere((c) => c["idCateg"] == widget.idCateg);
         _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
-        // print(_toDoList2.length);
+        
         buttonChanged = false;
       });
     });
   }
-
-// @override
-// 	void dispose(){
-// 	  // _controller.dispose();
-//     _sendDataBack(context);
-// 	  // super.dispose();
-
-// 	}
-  // void _buttonChange() {
-  //   setState(() {
-  //     buttonChanged = !buttonChanged;
-  //   });
-  // }
 
   String nmCateg(idCateg) {
     String nmCateg;
@@ -98,7 +86,7 @@ class _TasksPageState extends State<TasksPage> {
     setState(() {
       Map<String, dynamic> newTask = {
         "idCateg": "${widget.idCateg}",
-        "nmCateg": nmCateg(widget.idCateg), // "${widget.categ}",
+        "nmCateg": nmCateg(widget.idCateg),
         "txtTarefa": _toDoController.text,
         "ok": false
       };
@@ -107,6 +95,7 @@ class _TasksPageState extends State<TasksPage> {
         _toDoController.text = "";
         _toDoList.add(newTask);
         _saveData();
+
       }
     });
   }
@@ -145,10 +134,6 @@ class _TasksPageState extends State<TasksPage> {
                   onPressed: () => Navigator.of(context).pop(false),
                   child: Text('Continuar'),
                 ),
-                // new FlatButton(
-                //   onPressed: () => Navigator.of(context).pop(true),
-                //   child: Text('Sair'),
-                // ),
               ],
             ),
           ) ??
@@ -161,8 +146,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _exitApp(context), //() async => false,
-
+      onWillPop: () => _exitApp(context),
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -172,10 +156,8 @@ class _TasksPageState extends State<TasksPage> {
                   _sendDataBack(context);
                 }),
             title: Text(nmCateg(widget.idCateg),
-                style: TextStyle(
-                    fontSize: 20.0,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: "LibreBaskerville"))),
+                style:
+                    TextStyle(fontSize: 20.0, fontFamily: "LibreBaskerville"))),
         body: Column(
           children: <Widget>[
             Padding(
@@ -191,7 +173,7 @@ class _TasksPageState extends State<TasksPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                           controller: _toDoController,
-                          // autofocus: true,
+                          autofocus: true,
                           style: TextStyle(fontSize: 20),
                           decoration: InputDecoration(
                               hintText: "Digite uma tarefa",
@@ -199,10 +181,6 @@ class _TasksPageState extends State<TasksPage> {
                     )),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      // child: FlatButton(color: Colors.red, shape: ,
-                      //   child: Icon(Icons.check),
-                      //   onPressed: _addToDo,
-                      // ),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),
@@ -288,8 +266,8 @@ class _TasksPageState extends State<TasksPage> {
 
   Future<File> _saveData() async {
     var newMyList = _toDoList + _toDoList2;
-    _toDoList2 = [];
-    String data = json.encode(newMyList); //  json.encode(_toDoList2);
+    // _toDoList2 = [];
+    String data = json.encode(newMyList); //
     final file = await _getFile();
     return file.writeAsString(data);
   }
