@@ -74,6 +74,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _awaitReturnValueFromSecondScreen(BuildContext context, idx) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                TasksPage(idCateg: _categories[idx].idCateg.toString())));
+
+    if (result != null) {
+      switch (idx) {
+        case 0:
+          qtPend0 = int.parse(result);
+          break;
+        case 1:
+          qtPend1 = int.parse(result);
+          break;
+        case 2:
+          qtPend2 = int.parse(result);
+          break;
+        case 3:
+          qtPend3 = int.parse(result);
+          break;
+        case 4:
+          qtPend4 = int.parse(result);
+          break;
+        case 5:
+          qtPend5 = int.parse(result);
+          break;
+        case 6:
+          qtPend6 = int.parse(result);
+          break;
+      }
+    }
+  }
+
   Widget _categoryCards(context, idx) {
     String qtPendCateg;
     switch (_categories[idx].idCateg) {
@@ -109,17 +143,15 @@ class _HomePageState extends State<HomePage> {
         //     builder: (context) =>
         //         TasksPage(idCateg: _categories[idx].idCateg.toString()));
         // Navigator.push(context, route);
-        
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TasksPage(
-                  idCateg: _categories[idx].idCateg.toString(),
-                  // qtCateg: qtPendCateg
-                ),
-          ),
-        );
-        print(_categories[idx].idCateg.toString());
+        _awaitReturnValueFromSecondScreen(context, idx);
+        // final result = await Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           TasksPage(idCateg: _categories[idx].idCateg.toString()
+        //               // qtCateg: qtPendCateg
+        //               )),
+        // );
       },
       child: Padding(
         padding:

@@ -16,8 +16,7 @@ class Categ {
 
 class TasksPage extends StatefulWidget {
   final String idCateg;
-  // String qtCateg;
-
+  // bool buttonChanged = false;
   TasksPage({this.idCateg});
 
   @override
@@ -29,24 +28,41 @@ class _TasksPageState extends State<TasksPage> {
 
   List _toDoList = [];
   List _toDoList2 = [];
-
+  bool buttonChanged = false;
   Map<String, dynamic> _lastRemoved;
   int _lastRemovedPos;
 
   @override
   void initState() {
+    // print(widget.buttonChanged);
     super.initState();
     _readData().then((data) {
       setState(() {
         _toDoList = json.decode(data);
         _toDoList2 = json.decode(data);
+// print(widget.idCateg);
+// print(_toDoList2.length);
+// print(_toDoList.length);
         _toDoList2.removeWhere((c) => c["idCateg"] == widget.idCateg);
-
         _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
-        
+        // print(_toDoList2.length);
+        buttonChanged = false;
       });
     });
   }
+
+// @override
+// 	void dispose(){
+// 	  // _controller.dispose();
+//     _sendDataBack(context);
+// 	  // super.dispose();
+
+// 	}
+  // void _buttonChange() {
+  //   setState(() {
+  //     buttonChanged = !buttonChanged;
+  //   });
+  // }
 
   String nmCateg(idCateg) {
     String nmCateg;
@@ -86,13 +102,12 @@ class _TasksPageState extends State<TasksPage> {
         "txtTarefa": _toDoController.text,
         "ok": false
       };
-      _toDoController.text = "";
-
-      _toDoList.add(newTask);
-      
-      // widget.qtCateg = _toDoList.length.toString();
-      
-      _saveData();
+      buttonChanged = true;
+      if (_toDoController.text != "") {
+        _toDoController.text = "";
+        _toDoList.add(newTask);
+        _saveData();
+      }
     });
   }
 
@@ -113,65 +128,105 @@ class _TasksPageState extends State<TasksPage> {
     return null;
   }
 
+  _sendDataBack(BuildContext context) {
+    String textToSendBack = _toDoList.length.toString();
+    Navigator.pop(context, textToSendBack);
+  }
+
+  Future<bool> _exitApp(BuildContext context) async {
+    if (buttonChanged) {
+      return showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text('Para voltar...'),
+              content: Text('Clique no botão na barra superior'),
+              actions: <Widget>[
+                new FlatButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Continuar'),
+                ),
+                // new FlatButton(
+                //   onPressed: () => Navigator.of(context).pop(true),
+                //   child: Text('Sair'),
+                // ),
+              ],
+            ),
+          ) ??
+          false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(nmCateg(widget.idCateg),
-              style: TextStyle(
-                  fontSize: 20.0,
-                  // fontWeight: FontWeight.bold,
-                  fontFamily: "LibreBaskerville"))),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  border: Border.all(color: Colors.grey[500], width: 1.0)),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                        controller: _toDoController,
-                        // autofocus: true,
-                        style: TextStyle(fontSize: 20),
-                        decoration: InputDecoration(
-                            hintText: "Digite uma tarefa",
-                            labelStyle: TextStyle(color: Colors.blue))),
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    // child: FlatButton(color: Colors.red, shape: ,
-                    //   child: Icon(Icons.check),
-                    //   onPressed: _addToDo,
-                    // ),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      elevation: 4.0,
-                      color: Colors.lightBlueAccent,
-                      child: Icon(Icons.check),
-                      onPressed: _addToDo,
+    return WillPopScope(
+      onWillPop: () => _exitApp(context), //() async => false,
+
+      child: Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                child: Icon(Icons.arrow_back),
+                onTap: () {
+                  _sendDataBack(context);
+                }),
+            title: Text(nmCateg(widget.idCateg),
+                style: TextStyle(
+                    fontSize: 20.0,
+                    // fontWeight: FontWeight.bold,
+                    fontFamily: "LibreBaskerville"))),
+        body: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    border: Border.all(color: Colors.grey[500], width: 1.0)),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                          controller: _toDoController,
+                          // autofocus: true,
+                          style: TextStyle(fontSize: 20),
+                          decoration: InputDecoration(
+                              hintText: "Digite uma tarefa",
+                              labelStyle: TextStyle(color: Colors.blue))),
+                    )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      // child: FlatButton(color: Colors.red, shape: ,
+                      //   child: Icon(Icons.check),
+                      //   onPressed: _addToDo,
+                      // ),
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        elevation: 4.0,
+                        color: Colors.lightBlueAccent,
+                        child: Icon(Icons.check),
+                        onPressed: _addToDo,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: _refresh,
-              child: ListView.builder(
-                  padding: EdgeInsets.only(top: 8.0),
-                  itemCount: _toDoList.length,
-                  itemBuilder: buildItem),
-            ),
-          )
-        ],
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _refresh,
+                child: ListView.builder(
+                    padding: EdgeInsets.only(top: 8.0),
+                    itemCount: _toDoList.length,
+                    itemBuilder: buildItem),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
