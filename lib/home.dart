@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:task_mate/drawer.dart';
 import 'package:task_mate/tasks.dart';
 
 class HomePage extends StatefulWidget {
@@ -54,13 +55,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Center(
-        child: Text("LISTAS",
-            style: TextStyle(
-                fontSize: 30.0,
-                fontFamily: "LibreBaskerville")),
-      )),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 55.0),
+            child: Text("LISTAS",
+              style: TextStyle(fontSize: 30.0, fontFamily: "LibreBaskerville")),
+          ),
+      ),
       body: buildBody(),
+      drawer: CustomDrawer(),
     );
   }
 
