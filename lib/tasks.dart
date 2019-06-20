@@ -15,9 +15,10 @@ class Categ {
 }
 
 class TasksPage extends StatefulWidget {
+  final Color colorCateg;
   final String idCateg;
   // bool buttonChanged = false;
-  TasksPage({this.idCateg});
+  TasksPage({this.colorCateg, this.idCateg});
 
   @override
   _TasksPageState createState() => _TasksPageState();
@@ -31,12 +32,13 @@ class _TasksPageState extends State<TasksPage> {
   bool buttonChanged = false;
   Map<String, dynamic> _lastRemoved;
   int _lastRemovedPos;
+  FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
 
-    // Future.delayed(const Duration(seconds: 5), () => "1");
+    _focusNode = FocusNode();
     sleep(const Duration(milliseconds: 10));
 
     _readData().then((data) {
@@ -50,6 +52,12 @@ class _TasksPageState extends State<TasksPage> {
         buttonChanged = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   String nmCateg(idCateg) {
@@ -148,15 +156,19 @@ class _TasksPageState extends State<TasksPage> {
       onWillPop: () => _exitApp(context),
       child: Scaffold(
         appBar: AppBar(
+            backgroundColor: widget.colorCateg,
             automaticallyImplyLeading: false,
             leading: InkWell(
-                child: Icon(Icons.arrow_back),
+                child: Icon(Icons.arrow_back,
+                    color: Colors.black.withOpacity(0.5)),
                 onTap: () {
                   _sendDataBack(context);
                 }),
             title: Text(nmCateg(widget.idCateg),
-                style:
-                    TextStyle(fontSize: 20.0, fontFamily: "LibreBaskerville"))),
+                style: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                    fontSize: 20.0,
+                    fontFamily: "LibreBaskerville"))),
         body: Column(
           children: <Widget>[
             Padding(
@@ -173,7 +185,6 @@ class _TasksPageState extends State<TasksPage> {
                       child: TextField(
                           textCapitalization: TextCapitalization.sentences,
                           controller: _toDoController,
-                          autofocus: true,
                           style: TextStyle(fontSize: 20),
                           decoration: InputDecoration(
                               hintText: "Digite uma tarefa",
@@ -187,7 +198,10 @@ class _TasksPageState extends State<TasksPage> {
                         elevation: 4.0,
                         color: Colors.lightBlueAccent,
                         child: Icon(Icons.check),
-                        onPressed: _addToDo,
+                        onPressed: () {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          return _addToDo();
+                        },
                       ),
                     ),
                   ],

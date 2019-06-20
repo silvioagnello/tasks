@@ -79,8 +79,9 @@ class _HomePageState extends State<HomePage> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                TasksPage(idCateg: _categories[idx].idCateg.toString())));
+            builder: (context) => TasksPage(
+                colorCateg: _categories[idx].color,
+                idCateg: _categories[idx].idCateg.toString())));
 
     if (result != null) {
       switch (idx) {
