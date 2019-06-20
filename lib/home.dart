@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
         child: Text("LISTAS",
             style: TextStyle(
                 fontSize: 30.0,
-                // fontWeight: FontWeight.bold,
                 fontFamily: "LibreBaskerville")),
       )),
       body: buildBody(),
@@ -140,25 +139,14 @@ class _HomePageState extends State<HomePage> {
 
     return GestureDetector(
       onTap: () {
-        // String qtCateg;
-        // Route route = MaterialPageRoute(
-        //     builder: (context) =>
-        //         TasksPage(idCateg: _categories[idx].idCateg.toString()));
-        // Navigator.push(context, route);
         _awaitReturnValueFromSecondScreen(context, idx);
-        // final result = await Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (context) =>
-        //           TasksPage(idCateg: _categories[idx].idCateg.toString()
-        //               // qtCateg: qtPendCateg
-        //               )),
-        // );
       },
       child: Padding(
-        padding:
-            const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 0.0),
+        padding: const EdgeInsets.all(
+            0.0), //only(top: 10.0, left: 20.0, right: 20.0, bottom: 0.0),
         child: Card(
+          margin:
+              EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0, bottom: 2.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -169,6 +157,7 @@ class _HomePageState extends State<HomePage> {
                 border: Border.all(color: Colors.grey[500], width: 1.0)),
             // color: _categories[idx].color,
             height: 100.0,
+
             child: Padding(
               padding: const EdgeInsets.only(top: 20),
               child: ListTile(
