@@ -172,7 +172,7 @@ class _TasksPageState extends State<TasksPage> {
         body: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 12.0),
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -207,6 +207,14 @@ class _TasksPageState extends State<TasksPage> {
                   ],
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: _toDoList.length > 0 ? Text(
+                "Arraste a tarefa à direita para eliminar definitivo",
+                style: TextStyle(
+                    fontSize: 12.0, color: Colors.black.withOpacity(0.5)),
+              ) : Text(""),
             ),
             Expanded(
               child: RefreshIndicator(

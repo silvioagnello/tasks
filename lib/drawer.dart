@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:task_mate/drawer_tiles.dart';
 
 class CustomDrawer extends StatelessWidget {
+
+  final PageController pageController;
+
+  CustomDrawer(this.pageController);
+
   @override
   Widget build(BuildContext context) {
     
@@ -39,7 +44,7 @@ class CustomDrawer extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       Positioned(
-                          top: 60.0,
+                          top: 70.0,
                           left: 70.0,
                           child: Container(
                             width: 100.0,
@@ -64,8 +69,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               // Divider(),
-              DrawerTile(Icons.help, "Ajuda"),
-              DrawerTile(Icons.perm_media, "Sobre"),
+              // DrawerTile(Icons.help, "Ajuda", pageController, 1),
+              // DrawerTile(Icons.perm_media, "Sobre", pageController, 2),
 
             ],
           )

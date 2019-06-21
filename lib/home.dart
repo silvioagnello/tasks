@@ -53,26 +53,32 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _pageController = PageController();
     return Scaffold(
       appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.only(left: 55.0),
-            child: Text("LISTAS",
+        title: Padding(
+          padding: const EdgeInsets.only(left: 55.0),
+          child: Text("LISTAS",
               style: TextStyle(fontSize: 30.0, fontFamily: "LibreBaskerville")),
-          ),
+        ),
       ),
-      body: buildBody(),
-      drawer: CustomDrawer(),
+      body: buildBody(_pageController),
+      drawer: CustomDrawer(_pageController),
     );
   }
 
-  Container buildBody() {
-    return Container(
-      color: Colors.blue[100],
-      child: ListView.builder(
-        itemCount: _categories.length,
-        itemBuilder: _categoryCards,
-      ),
+  buildBody(pc) {
+    return PageView(
+      controller: pc,
+      physics: NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        Container(
+            color: Colors.blue[100],
+            child: ListView.builder(
+                itemCount: _categories.length, itemBuilder: _categoryCards)),
+        Container(color: Colors.yellow),
+        Container(color: Colors.brown)
+      ],
     );
   }
 
@@ -153,30 +159,43 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           elevation: 8.0,
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                border: Border.all(color: Colors.grey[500], width: 1.0)),
-            // color: _categories[idx].color,
-            height: 100.0,
-
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: ListTile(
-                trailing: Text("$qtPendCateg"),
-                leading: Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[500], width: 0.5),
-                      shape: BoxShape.circle,
-                      color: _categories[idx].color),
-                  child: Icon(_categories[idx].icon, size: 40.0),
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                right: 5,
+                bottom: 5,
+                child: (int.parse(qtPendCateg) == 0) ? Text("") : Text(
+                  "Pendências: $qtPendCateg",
+                  style: TextStyle(
+                      fontSize: 13, color: Colors.black.withOpacity(0.5)),
                 ),
-                title: Text(_categories[idx].nmCateg,
-                    style: TextStyle(fontSize: 24, color: Colors.black87)),
               ),
-            ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    border: Border.all(color: Colors.grey[500], width: 1.0)),
+                // color: _categories[idx].color,
+                height: 100.0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: ListTile(
+                    // trailing: Text("$qtPendCateg"),
+                    leading: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.grey[500], width: 0.5),
+                          shape: BoxShape.circle,
+                          color: _categories[idx].color),
+                      child: Icon(_categories[idx].icon, size: 40.0),
+                    ),
+                    title: Text(_categories[idx].nmCateg,
+                        style: TextStyle(fontSize: 24, color: Colors.black87)),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
