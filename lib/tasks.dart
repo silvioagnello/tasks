@@ -156,19 +156,23 @@ class _TasksPageState extends State<TasksPage> {
       onWillPop: () => _exitApp(context),
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: widget.colorCateg,
-            automaticallyImplyLeading: false,
-            leading: InkWell(
-                child: Icon(Icons.arrow_back,
-                    color: Colors.black.withOpacity(0.5)),
-                onTap: () {
-                  _sendDataBack(context);
-                }),
-            title: Text(nmCateg(widget.idCateg),
-                style: TextStyle(
-                    color: Colors.black.withOpacity(0.5),
-                    fontSize: 20.0,
-                    fontFamily: "LibreBaskerville"))),
+          backgroundColor: widget.colorCateg,
+          automaticallyImplyLeading: false,
+          leading: InkWell(
+              child:
+                  Icon(Icons.arrow_back, color: Colors.black.withOpacity(0.5)),
+              onTap: () {
+                _sendDataBack(context);
+              }),
+          title: Text(nmCateg(widget.idCateg),
+              style: TextStyle(
+                  color: Colors.black.withOpacity(0.5),
+                  fontSize: 20.0,
+                  fontFamily: "LibreBaskerville")),
+          // actions: <Widget>[
+          //   Icon(Icons.history)
+          // ],
+        ),
         body: Column(
           children: <Widget>[
             Padding(
@@ -210,11 +214,13 @@ class _TasksPageState extends State<TasksPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: _toDoList.length > 0 ? Text(
-                "Arraste a tarefa à direita para eliminar definitivo",
-                style: TextStyle(
-                    fontSize: 12.0, color: Colors.black.withOpacity(0.5)),
-              ) : Text(""),
+              child: _toDoList.length > 0
+                  ? Text(
+                      "Arraste a tarefa à direita para eliminar",
+                      style: TextStyle(
+                          fontSize: 12.0, color: Colors.black.withOpacity(0.5)),
+                    )
+                  : Text(""),
             ),
             Expanded(
               child: RefreshIndicator(
