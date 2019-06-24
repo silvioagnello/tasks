@@ -32,10 +32,14 @@ class _HomePageState extends State<HomePage> {
   int qtPend5 = 0;
   int qtPend6 = 0;
 
+
+
   @override
   void initState() {
     super.initState();
+
     _readData().then((data) {
+       if (data != null){
       setState(() {
         _toDoList3 = json.decode(data);
 
@@ -48,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         qtPend5 = _toDoList3.where((c) => c["idCateg"] == "5").length;
         qtPend6 = _toDoList3.where((c) => c["idCateg"] == "6").length;
       });
-    });
+    }});
   }
 
   @override
@@ -164,11 +168,13 @@ class _HomePageState extends State<HomePage> {
               Positioned(
                 right: 5,
                 bottom: 5,
-                child: (int.parse(qtPendCateg) == 0) ? Text("") : Text(
-                  "Pendências: $qtPendCateg",
-                  style: TextStyle(
-                      fontSize: 13, color: Colors.black.withOpacity(0.5)),
-                ),
+                child: (int.parse(qtPendCateg) == 0)
+                    ? Text("")
+                    : Text(
+                        "Pendências: $qtPendCateg",
+                        style: TextStyle(
+                            fontSize: 13, color: Colors.black.withOpacity(0.5)),
+                      ),
               ),
               Container(
                 decoration: BoxDecoration(
@@ -214,15 +220,16 @@ class Category {
 
 Future<File> _getFile() async {
   final directory = await getApplicationDocumentsDirectory();
-  return File("${directory.path}/tasks.json");
+  final file = File("${directory.path}/tasks.json");
+  return file.existsSync() ? file : null;
 }
 
 Future<String> _readData() async {
-  try {
-    final file = await _getFile();
-    final s = file.lengthSync();
-    return file.readAsString();
-  } catch (e) {
-    return null;
-  }
+   try {
+      final file = await _getFile();
+
+      return file.readAsString();
+    } catch (e) {
+      return null;
+    }
 }
