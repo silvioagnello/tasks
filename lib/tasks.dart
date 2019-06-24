@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:path_provider/path_provider.dart';
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:task_mate/helper.dart';
 
 class Categ {
   String idCateg;
@@ -17,7 +18,7 @@ class Categ {
 class TasksPage extends StatefulWidget {
   final Color colorCateg;
   final String idCateg;
-  // bool buttonChanged = false;
+  
   TasksPage({this.colorCateg, this.idCateg});
 
   @override
@@ -34,6 +35,8 @@ class _TasksPageState extends State<TasksPage> {
   int _lastRemovedPos;
   FocusNode _focusNode;
 
+  Helper helper = new Helper();
+
   @override
   void initState() {
     super.initState();
@@ -41,8 +44,9 @@ class _TasksPageState extends State<TasksPage> {
     _focusNode = FocusNode();
     sleep(const Duration(milliseconds: 10));
 
-    _readData().then((data) {
+    helper.readData().then((data) {
       setState(() {
+         if (data != null) {
         _toDoList = json.decode(data);
         _toDoList2 = json.decode(data);
 
@@ -50,7 +54,7 @@ class _TasksPageState extends State<TasksPage> {
         _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
 
         buttonChanged = false;
-      });
+      }});
     });
   }
 
@@ -290,26 +294,13 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  Future<File> _getFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return File("${directory.path}/tasks.json");
-  }
 
   Future<File> _saveData() async {
     var newMyList = _toDoList + _toDoList2;
     // _toDoList2 = [];
     String data = json.encode(newMyList); //
-    final file = await _getFile();
+    File file = await helper.getFile();
     return file.writeAsString(data);
   }
 
-  Future<String> _readData() async {
-    try {
-      final file = await _getFile();
-      final s = file.lengthSync();
-      return file.readAsString();
-    } catch (e) {
-      return null;
-    }
-  }
 }

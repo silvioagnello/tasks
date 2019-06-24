@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:task_mate/drawer.dart';
+import 'package:task_mate/helper.dart';
 import 'package:task_mate/tasks.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,27 +33,28 @@ class _HomePageState extends State<HomePage> {
   int qtPend5 = 0;
   int qtPend6 = 0;
 
-
+  Helper helper = new Helper();
 
   @override
   void initState() {
     super.initState();
 
-    _readData().then((data) {
-       if (data != null){
-      setState(() {
-        _toDoList3 = json.decode(data);
+    helper.readData().then((data) {
+      if (data != null) {
+        setState(() {
+          _toDoList3 = json.decode(data);
 
-        _toDoList3.removeWhere((d) => d["ok"] == true);
-        qtPend0 = _toDoList3.where((c) => c["idCateg"] == "0").length;
-        qtPend1 = _toDoList3.where((c) => c["idCateg"] == "1").length;
-        qtPend2 = _toDoList3.where((c) => c["idCateg"] == "2").length;
-        qtPend3 = _toDoList3.where((c) => c["idCateg"] == "3").length;
-        qtPend4 = _toDoList3.where((c) => c["idCateg"] == "4").length;
-        qtPend5 = _toDoList3.where((c) => c["idCateg"] == "5").length;
-        qtPend6 = _toDoList3.where((c) => c["idCateg"] == "6").length;
-      });
-    }});
+          _toDoList3.removeWhere((d) => d["ok"] == true);
+          qtPend0 = _toDoList3.where((c) => c["idCateg"] == "0").length;
+          qtPend1 = _toDoList3.where((c) => c["idCateg"] == "1").length;
+          qtPend2 = _toDoList3.where((c) => c["idCateg"] == "2").length;
+          qtPend3 = _toDoList3.where((c) => c["idCateg"] == "3").length;
+          qtPend4 = _toDoList3.where((c) => c["idCateg"] == "4").length;
+          qtPend5 = _toDoList3.where((c) => c["idCateg"] == "5").length;
+          qtPend6 = _toDoList3.where((c) => c["idCateg"] == "6").length;
+        });
+      }
+    });
   }
 
   @override
@@ -218,18 +220,18 @@ class Category {
   Category(this.idCateg, this.nmCateg, this.icon, this.color);
 }
 
-Future<File> _getFile() async {
-  final directory = await getApplicationDocumentsDirectory();
-  final file = File("${directory.path}/tasks.json");
-  return file.existsSync() ? file : null;
-}
+// Future<File> _getFile() async {
+//   final directory = await getApplicationDocumentsDirectory();
+//   final file = File("${directory.path}/tasks.json");
+//   return file.existsSync() ? file : null;
+// }
 
-Future<String> _readData() async {
-   try {
-      final file = await _getFile();
+// Future<String> _readData() async {
+//    try {
+//       final file = await _getFile();
 
-      return file.readAsString();
-    } catch (e) {
-      return null;
-    }
-}
+//       return file.readAsString();
+//     } catch (e) {
+//       return null;
+//     }
+// }
