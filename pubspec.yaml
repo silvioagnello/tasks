@@ -79,6 +79,7 @@ flutter:
   assets:
     - assets/icons/RoundIcons-Free-Set-16.png
     - assets/fonts/
+    - assets/images/
   fonts:
     - family: NothingYouCouldDo
       fonts:

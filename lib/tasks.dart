@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'dart:async';
-
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ class Categ {
 class TasksPage extends StatefulWidget {
   final Color colorCateg;
   final String idCateg;
-  
+
   TasksPage({this.colorCateg, this.idCateg});
 
   @override
@@ -36,123 +35,6 @@ class _TasksPageState extends State<TasksPage> {
   FocusNode _focusNode;
 
   Helper helper = new Helper();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _focusNode = FocusNode();
-    sleep(const Duration(milliseconds: 10));
-
-    helper.readData().then((data) {
-      setState(() {
-         if (data != null) {
-        _toDoList = json.decode(data);
-        _toDoList2 = json.decode(data);
-
-        _toDoList2.removeWhere((c) => c["idCateg"] == widget.idCateg);
-        _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
-
-        buttonChanged = false;
-      }});
-    });
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  String nmCateg(idCateg) {
-    String nmCateg;
-    switch (idCateg) {
-      case "0":
-        nmCateg = 'MERCADO';
-        break;
-      case "1":
-        nmCateg = 'FARMÁCIA';
-        break;
-      case "2":
-        nmCateg = 'CONSTRUÇÃO';
-        break;
-      case "3":
-        nmCateg = 'TAREFAS';
-        break;
-      case "4":
-        nmCateg = 'AUTOMÓVEL';
-        break;
-      case "5":
-        nmCateg = 'ROUPAS';
-        break;
-      case "6":
-        nmCateg = 'OUTROS';
-        break;
-      default:
-        nmCateg = 'EXTRA';
-    }
-    return nmCateg;
-  }
-
-  void _addToDo() {
-    setState(() {
-      Map<String, dynamic> newTask = {
-        "idCateg": "${widget.idCateg}",
-        "nmCateg": nmCateg(widget.idCateg),
-        "txtTarefa": _toDoController.text,
-        "ok": false
-      };
-      buttonChanged = true;
-      if (_toDoController.text != "") {
-        _toDoController.text = "";
-        _toDoList.add(newTask);
-        _saveData();
-      }
-    });
-  }
-
-  Future<Null> _refresh() async {
-    await Future.delayed(Duration(seconds: 1));
-    setState(() {
-      _toDoList.sort((a, b) {
-        if (a["ok"] && !b["ok"])
-          return 1;
-        else if (!a["ok"] && b["ok"])
-          return -1;
-        else
-          return 0;
-      });
-
-      // _saveData();
-    });
-    return null;
-  }
-
-  _sendDataBack(BuildContext context) {
-    String textToSendBack = _toDoList.length.toString();
-    Navigator.pop(context, textToSendBack);
-  }
-
-  Future<bool> _exitApp(BuildContext context) async {
-    if (buttonChanged) {
-      return showDialog(
-            context: context,
-            child: AlertDialog(
-              title: Text('Para voltar...'),
-              content: Text('Clique no botão na barra superior'),
-              actions: <Widget>[
-                new FlatButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('Continuar'),
-                ),
-              ],
-            ),
-          ) ??
-          false;
-    } else {
-      return true;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,6 +119,7 @@ class _TasksPageState extends State<TasksPage> {
             )
           ],
         ),
+        bottomNavigationBar: buildBottomNavigationBar(widget.idCateg),
       ),
     );
   }
@@ -294,6 +177,118 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _focusNode = FocusNode();
+    sleep(const Duration(milliseconds: 10));
+
+    helper.readData().then((data) {
+      setState(() {
+        if (data != null) {
+          _toDoList = json.decode(data);
+          _toDoList2 = json.decode(data);
+
+          _toDoList2.removeWhere((c) => c["idCateg"] == widget.idCateg);
+          _toDoList.removeWhere((c) => c["idCateg"] != widget.idCateg);
+
+          buttonChanged = false;
+        }
+      });
+    });
+  }
+
+  String nmCateg(idCateg) {
+    String nmCateg;
+    switch (idCateg) {
+      case "0":
+        nmCateg = 'MERCADO';
+        break;
+      case "1":
+        nmCateg = 'FARMÁCIA';
+        break;
+      case "2":
+        nmCateg = 'CONSTRUÇÃO';
+        break;
+      case "3":
+        nmCateg = 'TAREFAS';
+        break;
+      case "4":
+        nmCateg = 'AUTOMÓVEL';
+        break;
+      case "5":
+        nmCateg = 'ROUPAS';
+        break;
+      case "6":
+        nmCateg = 'OUTROS';
+        break;
+      default:
+        nmCateg = 'EXTRA';
+    }
+    return nmCateg;
+  }
+
+  void _addToDo() {
+    setState(() {
+      Map<String, dynamic> newTask = {
+        "idCateg": "${widget.idCateg}",
+        "nmCateg": nmCateg(widget.idCateg),
+        "txtTarefa": _toDoController.text,
+        "ok": false
+      };
+      buttonChanged = true;
+      if (_toDoController.text != "") {
+        _toDoController.text = "";
+        _toDoList.add(newTask);
+        _saveData();
+      }
+    });
+  }
+
+  Future<bool> _exitApp(BuildContext context) async {
+    if (buttonChanged) {
+      return showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text('Para voltar...'),
+              content: Text('Clique no botão na barra superior'),
+              actions: <Widget>[
+                new FlatButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Continuar'),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<Null> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      _toDoList.sort((a, b) {
+        if (a["ok"] && !b["ok"])
+          return 1;
+        else if (!a["ok"] && b["ok"])
+          return -1;
+        else
+          return 0;
+      });
+
+      // _saveData();
+    });
+    return null;
+  }
 
   Future<File> _saveData() async {
     var newMyList = _toDoList + _toDoList2;
@@ -303,4 +298,39 @@ class _TasksPageState extends State<TasksPage> {
     return file.writeAsString(data);
   }
 
+  _sendDataBack(BuildContext context) {
+    String textToSendBack = _toDoList.length.toString();
+    Navigator.pop(context, textToSendBack);
+  }
+}
+
+Widget buildBottomNavigationBar(String idCateg) {
+  if (idCateg != '0') {
+    return null;
+  } else {
+    return BottomAppBar(
+        child: Stack(
+      children: <Widget>[
+        Container(
+          color: Colors.red,
+          height: 110,
+          width: double.infinity,
+          child: Image.asset(
+            'assets/images/logo-de-supermercado-em-png-2.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Positioned(
+          right: 7,
+          bottom: 25,
+          child: IconButton(
+            iconSize: 50,
+            color: Colors.white,
+            icon: Icon(Icons.arrow_right),
+            onPressed: () {},
+          ),
+        )
+      ],
+    ));
+  }
 }
