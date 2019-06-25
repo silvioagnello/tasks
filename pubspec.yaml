@@ -23,12 +23,18 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  #sqflite: any
+  path_provider: ^1.1.0
+  flutter_launcher_icons: ^0.7.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/icons/RoundIcons-Free-Set-16.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -71,7 +77,9 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
+    - assets/icons/RoundIcons-Free-Set-16.png
     - assets/fonts/
+    - assets/images/
   fonts:
     - family: NothingYouCouldDo
       fonts:
